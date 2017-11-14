@@ -5,12 +5,25 @@ Created on 20171110
 '''
 from urllib import request
 
+from getdata.datastorage import Datastorage
+
+
 class HtmlDownloader(object):
     
     def download(self,url):
         if url is None:
           return None
         fails = 0
+        try:
+          #获取会话指针
+          connection = Datastorage().getconnection();
+          with connection.cursor() as cursor:
+            #创建sql
+            sql = "insert into `url_record`(`urls`) values(%s)"
+            cursor.execute(sql,url)
+            connection.commit()
+        finally:
+          connection.close()
         #add this try code to create the blocking problem when the net is unstable
         while True:
           try:
@@ -32,14 +45,10 @@ class HtmlDownloader(object):
             if resp.getcode() !=200:
               return None
             #print(resp.read().decode("unicode-escape"))
-            return resp.read().decode("unicode-escape")
+            return resp.read()
           except:
             fails +=1
             print("the net was unstable and we are tying again:",fails) 
           else:
             break
     
-    
-
-
-
