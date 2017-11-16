@@ -22,9 +22,6 @@ try:
     sql = "select * from `toutiao` where `id` is not null"
     count = cursor.execute(sql)
     print(count)
-    #a =  cursor.fetchone()
-    #print(a)
-    #cursor.fetchmany(size = 1)
     all = cursor.fetchall()
     for i in range(0,count):
       for j in range(0,len(row0)):
